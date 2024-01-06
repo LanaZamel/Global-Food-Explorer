@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      var jsonData = [];
+      var minYear, maxYear;
+      var currentYear;
+      var timeLapseTimer;
+
+      google.charts.load('current', {
+        'packages':['geochart'],
+      });
+      google.charts.setOnLoadCallback(loadData);
+
+      function loadData() {
+        $.getJSON("filtered_tobacco_global_food.json", function(data) {
+          jsonData = data;
+          minYear = Math.min.apply(Math, jsonData.map(function(o) { return o.Year; }));
+          maxYear = Math.max.apply(Math, jsonData.map(function(o) { return o.Year; }));
+          drawRegionsMap(minYear);
+        });
+      }
+
+      function drawRegionsMap(year) {
+        updateHeader(year);
+        var filteredData = jsonData.filter(function(d) {
+          return d.Year == year;
+        });
+
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Country');
+        data.addColumn('number', 'Production (t)');
+        data.addColumn({type: 'string', role: 'tooltip', p: {html: true}});
+
+        filteredData.forEach(function(d) {
+          var tooltipContent = '<div style="padding:1px 1px 1px 1px;">' +
+                               + year + '<br>' +
+                               'Population: ' + d.Population.toLocaleString() + '<br><hr>' +
+                               'Production (t) <strong>: ' + d["Production (t)"].toLocaleString() + '</strong></div>';
+          data.addRow([d.Country, d["Production (t)"], tooltipContent]);
+        });
+
+        var options = {
+          colorAxis: {
+            minValue: 0,
+            colors: ['#EDF8FB', '#B2E2E1', '#66C2A4', '#2BA25E', '#016C2C'],
+            values: [0, 24329, 75679, 155000, 298645]
+          },
+          tooltip: {isHtml: true},
+          sizeAxis: {minValue: 0, maxSize: 50},
+        };
+
+        var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
+        chart.draw(data, options);
+      }
+
+      function updateHeader(year) {
+        $('#header').text('Tobacco Production, ' + year);
+      }
+
+      function playTimeLapse() {
+        currentYear = minYear;
+        function iterateYears() {
+          if(currentYear > maxYear) {
+            clearTimeout(timeLapseTimer);
+            return;
+          }
+          drawRegionsMap(currentYear);
+          currentYear++;
+          timeLapseTimer = setTimeout(iterateYears, 200);
+        }
+        iterateYears();
+      }
+
+      function stopTimeLapse() {
+        clearTimeout(timeLapseTimer);
+      }
+
+      $(document).ready(function() {
+        $('#yearInput').change(function() {
+          stopTimeLapse(); // Stop the time-lapse if the user selects a year
+          drawRegionsMap($(this).val());
+          updateHeader($(this).val());
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h2 id="header">Tobacco Production</h2>
+    <label for="yearInput">Enter Year:</label>
+    <input type="number" id="yearInput" placeholder="e.g. 2021">
+    <button onclick="playTimeLapse()">Play Time-Lapse</button>
+    <button onclick="stopTimeLapse()">Stop Time-Lapse</button>
+    <div id="regions_div" style="width: 900px; height: 500px; margin-top: 50px;"></div>
+    <div id="color-legend">
+        <div><span style="background-color: #F5F5F5;">&nbsp;&nbsp;&nbsp;&nbsp;</span> No data</div>
+        <div><span style="background-color: #EDF8FB;">&nbsp;&nbsp;&nbsp;&nbsp;</span> 0 - 24,329 t</div>
+        <div><span style="background-color: #B2E2E1;">&nbsp;&nbsp;&nbsp;&nbsp;</span> 24,329 - 75,679 t</div>
+        <div><span style="background-color: #66C2A4;">&nbsp;&nbsp;&nbsp;&nbsp;</span> 75,679 - 155,000 t</div>
+        <div><span style="background-color: #2BA25E;">&nbsp;&nbsp;&nbsp;&nbsp;</span> 155,000 - 298,645 t</div>
+        <div><span style="background-color: #016C2C;">&nbsp;&nbsp;&nbsp;&nbsp;</span> over 298,645 t</div>
+    </div>
+    <style>
+        #color-legend div {
+          display: flex;
+          align-items: center;
+          margin-top: 5px;
+        }
+        #color-legend span {
+          display: inline-block;
+          width: 20px;
+          height: 20px;
+          margin-right: 10px;
+          border: 1px solid #000;
+        }
+    </style>
+  </body>
+</html>

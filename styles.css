@@ -1,0 +1,140 @@
+/* Reset some basic elements */
+body, button, input, label {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+/* Use a sans-serif font for a modern look */
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1;
+    background-color: #f4f4f4; /* Light grey background */
+    padding: 20px; /* Add some padding around the content */
+}
+
+h1 {
+    color: #333; /* Dark grey color for headers */
+    text-align: center; /* Center the header */
+    margin-bottom: 20px; /* Add space below the header */
+}
+
+/* Style the form elements with a modern look */
+input[type=number], input[type=range], button {
+    padding: 10px;
+    margin: 10px 0;
+    display: inline;
+    width: 20%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+input[type=number] {
+    border: 1px solid #ccc; /* Light grey border */
+    border-radius: 4px; /* Rounded corners */
+}
+
+button {
+    background-color: #4CAF50; /* Green background */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
+
+/* Style the chart container for a clean look */
+#regions_div {
+    width: 900px;
+    height: 500px;
+    margin: 20px auto;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+    margin-top: 20px; /* Space from the buttons */
+}
+
+/* Legend styling */
+#color-legend {
+    display: flex;
+    justify-content: center; /* Center the legend items */
+    padding: 10px;
+    margin-top: 20px;
+}
+
+#color-legend div {
+    flex: 1;
+    text-align: center; /* Center the legend text */
+    font-size: 0.8em; /* Smaller font size for the legend */
+}
+
+#color-legend span {
+    border: none; /* Remove border */
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.2); /* Inner shadow for a subtle depth */
+}
+
+/* Ensure the slider thumb appears nicely across all browsers */
+input[type='range'] {
+    -webkit-appearance: none;
+    margin: 18px 0;
+    width: 90%;
+}
+
+input[type='range']:focus {
+    outline: none;
+}
+
+input[type='range']::-webkit-slider-runnable-track {
+    background: #ddd;
+    border: none;
+    border-radius: 3px;
+    width: 100%;
+    height: 8px;
+    cursor: pointer;
+}
+
+input[type='range']::-webkit-slider-thumb {
+    margin-top: -9px;
+    width: 20px;
+    height: 20px;
+    background: #4CAF50;
+    border: 1px solid #4CAF50;
+    border-radius: 50%;
+    cursor: pointer;
+    -webkit-appearance: none;
+}
+
+input[type='range']:focus::-webkit-slider-runnable-track {
+    background: #ccc;
+}
+
+input[type='range']::-moz-range-track {
+    background: #ddd;
+    border: none;
+    border-radius: 3px;
+    width: 100%;
+    height: 8px;
+    cursor: pointer;
+}
+
+input[type='range']::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: #4CAF50;
+    border: 1px solid #4CAF50;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+/* Style the tooltip for a more professional appearance */
+.google-visualization-tooltip {
+    border: none !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important; /* Add shadow to tooltip */
+    border-radius: 4px !important; /* Rounded corners for tooltip */
+    font-size: 0.9em !important; /* Smaller font size for tooltip */
+}
